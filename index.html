@@ -52,19 +52,39 @@ tr.hi td{background:#22c55e1a}tr.lo td{background:#f43f5e1a}
 @keyframes zoom{from{opacity:0;transform:scale(.6) rotate(-4deg)}}
 @keyframes bounce{0%{opacity:0;transform:translateY(-30px)}60%{transform:translateY(6px)}}
 @keyframes pulse{50%{opacity:.55}}
-@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+
+
+header{position:static;padding:26px 28px;background:linear-gradient(120deg,#8b9cf7,#b79cf0 55%,#f4a6c6);color:#fff;border-radius:0 0 28px 28px;box-shadow:0 10px 30px #8b9cf755;backdrop-filter:none}
+header nav button,header>button{border-color:#ffffff99;color:#fff;background:#ffffff22;padding:9px 18px}
+header nav button.on{background:#fff;color:#6d79d9;border-color:#fff}
+.brand{display:flex;gap:14px;align-items:center}.logo{font-size:30px;background:#ffffff33;border-radius:16px;width:56px;height:56px;display:grid;place-items:center}
+h1{margin:0;font-size:clamp(18px,3.4vw,28px);letter-spacing:1px;font-weight:800}.brand small{opacity:.92;font-size:13px}
+main{padding-top:20px}
+.g{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch}.card{padding:10px 18px;min-width:0}.card b{font-size:26px}.card.ok b{color:var(--g)}
+.cwrap{position:relative;margin-left:auto;align-self:center}.cbtn{padding:11px 16px;border-radius:14px;border:2px solid #d5d9f0;background:#fff;cursor:pointer;font-weight:600}
+.pop{position:absolute;right:0;top:calc(100% + 8px);width:232px;background:#fff;border-radius:16px;padding:10px;box-shadow:0 14px 40px #6b6fa055;z-index:9;opacity:0;visibility:hidden;transform:translateY(-12px) scale(.9);transform-origin:top right;transition:.3s cubic-bezier(.3,1.5,.5,1)}
+.pop.open{opacity:1;visibility:visible;transform:none}
+.cg{gap:1px}.cg i{font-size:10px}.d{font-size:12px;aspect-ratio:auto;height:28px}.ch{font-size:13px}.ch button{width:24px;height:24px}.d.dot:after{bottom:2px;width:4px;height:4px}
+.tw{width:fit-content;max-width:100%}table{width:auto;min-width:0}th,td{padding:7px 10px;font-size:13px}
+.dt td:nth-child(-n+4),.dt td:nth-child(6),.k td{white-space:nowrap}.dt td:nth-child(5){min-width:200px;max-width:280px}.dt td:nth-child(n+7){min-width:90px;max-width:220px}
+button{transition:transform .15s,box-shadow .25s,background .25s,border-color .25s}button:active{transform:scale(.93)}
+.sel.on{animation:pp .5s}.d:active{transform:scale(.8)}
+main>section{animation:tab .5s both}
+@keyframes pp{0%{transform:scale(.92)}55%{transform:scale(1.07)}}
+@keyframes tab{from{opacity:0;transform:translateX(34px) scale(.98)}}
 </style></head><body>
 <div id="login"><div class="box"><h2>👋 Selamat datang di Pusat Kendali Workorder APM SO Depok</h2><p>Pantau dan kendalikan setiap pekerjaan dalam satu layar. Silahkan Login</p>
 <input id="u" placeholder="ID Karyawan" autocomplete="username"><input id="p" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key=='Enter')login()">
 <button class="pri" onclick="login()">Login</button><div id="err"></div></div></div>
 <div id="app" class="hide">
-<header><b>Controlling WO APM SO Depok</b><nav><button id="t1" class="on" onclick="tab(1)">Work Order</button> <button id="t2" onclick="tab(2)">Rekap KPI Bulanan</button></nav><button onclick="out()">Keluar</button></header>
+<header><div class="brand"><span class="logo">📊</span><div><h1>CONTROLLING WO APM SO DEPOK</h1><small>Pantau Work Order dan KPI teknisi dalam satu layar</small></div></div><nav><button id="t1" class="on" onclick="tab(1)">Work Order</button> <button id="t2" onclick="tab(2)">Rekap KPI Bulanan</button></nav><button onclick="out()">Keluar</button></header>
 <main>
 <section id="s1"><div id="rem"></div>
-<div class="g"><div class="card">Total Work Order<b id="n0">0</b></div>
+<div class="g"><div class="card">Total Work Order<b id="n0">0</b></div><div class="card ok">Complete<b id="n3">0</b></div>
 <button class="card sel" id="c1" onclick="selS('p')">Pending<b id="n1">0</b></button>
-<button class="card sel" id="c2" onclick="selS('c')">Cancel<b id="n2">0</b></button></div>
-<div class="g2"><div class="cw"><div id="cal"></div><button class="rs" onclick="clr()">Reset tanggal</button><div id="rng"></div></div><div id="det"><div class="empty">Pilih Pending atau Cancel untuk melihat detail Work Order.</div></div></div></section>
+<button class="card sel" id="c2" onclick="selS('c')">Cancel<b id="n2">0</b></button>
+<div class="cwrap"><button class="cbtn" onclick="tgl()">📅 <span id="rng">Semua tanggal</span></button><div id="pop" class="pop"><div id="cal"></div><button class="rs" onclick="clr()">Reset tanggal</button></div></div></div>
+<div id="det"><div class="empty">Pilih Pending atau Cancel untuk melihat detail Work Order.</div></div></section>
 <section id="s2" class="hide"><select id="per" onchange="kpi()"></select><div id="kt" class="tw"></div></section>
 </main></div>
 <script>
@@ -99,13 +119,13 @@ function tab(n){$('s1').classList.toggle('hide',n!=1);$('s2').classList.toggle('
 const inR=r=>!from||(r.t>=from&&r.t<=(to||from));
 function selS(x){sel=sel==x?null:x;render()}
 function render(){const f=W.filter(inR),P=f.filter(r=>r.s=='p'),C=f.filter(r=>r.s=='c');
- $('n0').textContent=f.length;$('n1').textContent=P.length;$('n2').textContent=C.length;
+ $('n0').textContent=f.length;$('n3').textContent=f.filter(r=>r.s=='ok').length;$('n1').textContent=P.length;$('n2').textContent=C.length;
  $('c1').classList.toggle('on',sel=='p');$('c2').classList.toggle('on',sel=='c');
- $('rng').textContent=from?'Tanggal: '+fmt(from)+(to&&to!=from?' – '+fmt(to):''):'Semua tanggal';
+ $('rng').textContent=from?fmt(from)+(to&&to!=from?' – '+fmt(to):''):'Semua tanggal';
  drawCal();const L=sel=='p'?P:sel=='c'?C:null;
  if(!L){$('det').innerHTML='<div class="empty">Pilih Pending atau Cancel untuk melihat detail Work Order.</div>';return}
  const rr=rowRem();
- $('det').innerHTML='<div class="tw a-'+sel+'"><table><thead><tr><th>Work Order</th><th>Tanggal Install</th><th>Teknisi</th><th>Pelanggan</th><th>Alamat</th><th>Status</th><th>Kendala</th><th>Remark</th></tr></thead><tbody>'+
+ $('det').innerHTML='<div class="tw a-'+sel+'"><table class="dt"><thead><tr><th>Work Order</th><th>Tanggal Install</th><th>Teknisi</th><th>Pelanggan</th><th>Alamat</th><th>Status</th><th>Kendala</th><th>Remark</th></tr></thead><tbody>'+
  (L.map((r,i)=>{const h=rr.get(r),b=sel=='p'?'bp':'bc';
  return '<tr class="'+(h?h.l:'')+'" style="animation-delay:'+Math.min(i,25)*35+'ms"><td>'+E(r.wo)+'</td><td>'+E(r.tg)+'</td><td>'+E(r.tk)+'</td><td>'+E(r.pl)+'</td><td>'+E(r.al)+'</td><td><span class="bd '+b+'">'+E(r.st)+'</span>'+(h?' <span class="tag">'+h.l.toUpperCase().replace('H','H-')+'</span>':'')+'</td><td>'+E(r.kd)+'</td><td>'+E(r.rm)+'</td></tr>'}).join('')||'<tr><td colspan="8" class="empty">Tidak ada data pada rentang tanggal ini.</td></tr>')+'</tbody></table></div>'}
 // Pengingat: tanggal mendatang pada Kendala/Remark (dan tanggal install untuk Pending): H-2 kuning, H-1 merah
@@ -129,5 +149,7 @@ function kpi(){const R=K[$('per').value]||[];if(!R.length){$('kt').innerHTML='<d
  $('kt').innerHTML='<table class="k"><thead><tr><th>ID Karyawan</th><th>Nama Karyawan</th><th>Target Bulanan</th><th>Realisasi Pemasangan</th><th>Target Harian</th><th>Realisasi Harian</th><th>% Pencapaian</th><th>Predikat</th></tr></thead><tbody>'+
  R.map((r,i)=>{const x=vs[i],c=x==mx?'hi':x==mn?'lo':'',a=x==mx?'<span class="ar up" title="Poin tertinggi">▲</span>':x==mn?'<span class="ar dn" title="Poin terendah">▼</span>':'';
  return '<tr class="'+c+'" style="animation-delay:'+Math.min(i,25)*30+'ms">'+[0,1,2,3,4,5,6,7].map(j=>'<td>'+E(r[j])+(j==1?a:'')+'</td>').join('')+'</tr>'}).join('')+'</tbody></table>'}
+function tgl(){$('pop').classList.toggle('open')}
+document.addEventListener('click',e=>{if(!e.composedPath().some(n=>n.classList&&n.classList.contains('cwrap')))$('pop').classList.remove('open')});
 if(sessionStorage.wo){try{cred=JSON.parse(sessionStorage.wo);load(cred.u,cred.p).then(d=>{if(d.ok)start(d)})}catch(e){}}
 </script></body></html>
