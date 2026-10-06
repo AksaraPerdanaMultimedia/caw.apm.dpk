@@ -99,8 +99,19 @@ main>section{animation:tab .5s both}
 .tabs{display:flex;gap:10px;margin:14px 0}.tabs button{padding:10px 22px;border-radius:12px;border:2px solid #cfd9ea;background:#fff;color:var(--t);cursor:pointer;font-weight:700}
 .tabs button:hover{border-color:var(--a);transform:translateY(-2px)}.tabs button.on{background:var(--a);color:#fff;border-color:var(--a);box-shadow:0 6px 16px #2563eb44}
 .st{margin:0 0 10px;font-size:20px}
+
+.box{position:relative;overflow:hidden}.box>*{position:relative;z-index:1}.box>.wm{position:absolute;inset:0;z-index:0}
+.wm{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;opacity:.13;pointer-events:none;user-select:none}
+.wm img{width:230px;max-width:70%}.wm span{font-weight:800;font-size:20px;letter-spacing:.06em;color:#64748b}
+#dw{position:relative;min-height:280px}.dwm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:3}.dwm .wm{position:static}.dwm .wm img{width:200px}
+.tw{border:1px solid #c3d0e4;box-shadow:0 8px 26px #1e3a5f1f;border-radius:14px}
+.tw th,.tw td{border:1px solid #d5deec;vertical-align:middle}.tw th{background:#19376d;color:#fff;border-color:#2a4a85;font-weight:700;white-space:nowrap}
+.dt td:first-child,.dt th:first-child,.dt td:nth-child(7),.dt th:nth-child(7){text-align:center}
+.dt tbody tr:nth-child(even):not(.h0,.h1,.h2,.h3) td{background:#f4f8fd}.dt tbody tr:hover:not(.h0,.h1,.h2,.h3) td{background:#e3edfb}
+.a-p,.a-c,.a-s{animation:wipe .85s cubic-bezier(.22,.8,.3,1) both}.a-p tbody tr,.a-c tbody tr,.a-s tbody tr{animation:inL .6s cubic-bezier(.22,.8,.3,1) both}
+@keyframes tab{from{opacity:0;transform:translateX(-40px)}}
 </style></head><body>
-<div id="login"><div class="box"><h2 class="lt"><span class="fit">SELAMAT DATANG</span><span class="fit">INI ADALAH DATA KONTROL WORK ORDER</span><span class="fit">APM SO DEPOK</span></h2><div class="sl">Silahkan Login</div>
+<div id="login"><div class="box"><div class="wm"><img src="Logo_APM.png" alt=""><span>APM Depok</span></div><h2 class="lt"><span class="fit">SELAMAT DATANG</span><span class="fit">ini adalah data kontrol work order</span><span class="fit s3">APM SO DEPOK</span></h2><div class="sl">Silahkan Login</div>
 <input id="u" placeholder="ID Karyawan" autocomplete="username"><input id="p" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key=='Enter')login()">
 <button class="pri" onclick="login()">Login</button><div id="err"></div></div></div>
 <div id="app" class="hide">
@@ -114,7 +125,7 @@ main>section{animation:tab .5s both}
 </div>
 <div class="tb"><div class="srch"><span>🔍</span><input id="q" placeholder="Cari No. WO, pelanggan, teknisi, alamat, kendala..." oninput="sq()"></div>
 <div class="cwrap"><button class="cbtn" onclick="tgl()">📅 <span id="rng">Semua tanggal</span></button><div id="pop" class="pop"><div id="cal"></div><button class="rs" onclick="clr()">Reset tanggal</button></div></div></div>
-<div id="det"><div class="empty">Pilih Pending atau Cancel untuk melihat detail Work Order.</div></div></section>
+<div id="dw"><div class="dwm"><div class="wm"><img src="Logo_APM.png" alt=""><span>APM Depok</span></div></div><div id="det"><div class="empty">Pilih Pending atau Cancel untuk melihat detail Work Order.</div></div></div></section>
 <section id="s2" class="hide"><h2 class="st">KPI Teknisi</h2><select id="per" onchange="kpi()"></select><div id="kt" class="tw"></div></section>
 </main></div>
 <script>
@@ -195,7 +206,7 @@ function kpi(){const R=K[$('per').value]||[];if(!R.length){$('kt').innerHTML='<d
  return '<tr class="'+c+'" style="animation-delay:'+Math.min(i,25)*30+'ms">'+[0,1,2,3,4,5,6,7].map(j=>'<td>'+E(r[j])+(j==1?a:'')+'</td>').join('')+'</tr>'}).join('')+'</tbody></table>'}
 function tgl(){$('pop').classList.toggle('open')}
 document.addEventListener('click',e=>{if(!e.composedPath().some(n=>n.classList&&n.classList.contains('cwrap')))$('pop').classList.remove('open')});
-function fit(){document.querySelectorAll('.fit').forEach(e=>{const w=e.parentNode.clientWidth;if(!w)return;e.style.fontSize='100px';const k=w/e.offsetWidth;e.style.fontSize=Math.min(54,Math.floor(100*k))+'px'})}
+function fit(){const L=[...document.querySelectorAll('.fit')];L.forEach(e=>{if(e.classList.contains('s3'))return;const w=e.parentNode.clientWidth;if(!w)return;e.style.fontSize='100px';const k=w/e.offsetWidth;e.style.fontSize=Math.min(54,Math.floor(100*k))+'px'});if(L[1]&&L[2])L[2].style.fontSize=L[1].style.fontSize}
 addEventListener('resize',fit);fit();if(document.fonts)document.fonts.ready.then(fit);
 function tick(){const n=new Date(),z={timeZone:'Asia/Jakarta'};
  $('jam').textContent=n.toLocaleTimeString('id-ID',{...z,hour12:false}).replace(/\./g,':')+' WIB';
