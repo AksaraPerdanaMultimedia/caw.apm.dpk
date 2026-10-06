@@ -91,14 +91,23 @@ main>section{animation:tab .5s both}
 .logo{font-size:20px;font-weight:800;letter-spacing:1px}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}.chip{padding:6px 12px;border-radius:999px;border:1px solid #cfd9ea;background:#fff;cursor:pointer;font-size:13px;animation:rise .4s both}
 .chip b{margin-left:4px;color:var(--a)}.chip:hover{border-color:var(--a);transform:translateY(-2px)}.chip.on{background:var(--a);color:#fff;border-color:var(--a)}.chip.on b{color:#fff}
+
+.box{max-width:430px}.box h2.lt{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:#0b2447;font-size:16px;margin:0 0 12px;line-height:1.15}
+.fit{display:block;width:fit-content;white-space:nowrap;font-weight:800;letter-spacing:.02em;background:linear-gradient(120deg,#0b2447,#0e7490);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hr{display:flex;flex-direction:column;align-items:flex-end;gap:8px}.clk{text-align:right;line-height:1.2}.clk b{display:block;font-size:24px;font-variant-numeric:tabular-nums;letter-spacing:1px}.clk small{opacity:.92;font-size:12px}
+.hr button{border:1px solid #ffffff99;color:#fff;background:#ffffff22;padding:7px 20px;border-radius:999px;cursor:pointer}
+.tabs{display:flex;gap:10px;margin:14px 0}.tabs button{padding:10px 22px;border-radius:12px;border:2px solid #cfd9ea;background:#fff;color:var(--t);cursor:pointer;font-weight:700}
+.tabs button:hover{border-color:var(--a);transform:translateY(-2px)}.tabs button.on{background:var(--a);color:#fff;border-color:var(--a);box-shadow:0 6px 16px #2563eb44}
+.st{margin:0 0 10px;font-size:20px}
 </style></head><body>
-<div id="login"><div class="box"><h2>Kendalikan Setiap Work Order APM SO Depok</h2><p>Pantau status, kendala, dan jadwal ulang pekerjaan dalam satu dashboard.</p><div class="sl">Silahkan Login</div>
+<div id="login"><div class="box"><h2 class="lt"><span class="fit">SELAMAT DATANG</span><span class="fit">INI ADALAH DATA KONTROL WORK ORDER</span><span class="fit">APM SO DEPOK</span></h2><div class="sl">Silahkan Login</div>
 <input id="u" placeholder="ID Karyawan" autocomplete="username"><input id="p" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key=='Enter')login()">
 <button class="pri" onclick="login()">Login</button><div id="err"></div></div></div>
 <div id="app" class="hide">
-<header><div class="brand"><span class="logo">WO</span><div><h1>CONTROLLING WO APM SO DEPOK</h1><small>Pantau Work Order dan KPI teknisi dalam satu layar</small></div></div><nav><button id="t1" class="on" onclick="tab(1)">Work Order</button> <button id="t2" onclick="tab(2)">Rekap KPI Bulanan</button></nav><button onclick="out()">Keluar</button></header>
+<header><div class="brand"><span class="logo">WO</span><div><h1>CONTROLLING WO APM SO DEPOK</h1><small>Pantau Work Order dan KPI teknisi dalam satu layar</small></div></div><div class="hr"><div class="clk"><b id="jam"></b><small id="tgl"></small></div><button onclick="out()">Keluar</button></div></header>
 <main>
-<section id="s1"><div id="rem"></div>
+<div id="rem"></div><nav class="tabs"><button id="t1" class="on" onclick="tab(1)">Work Order</button><button id="t2" onclick="tab(2)">KPI Teknisi</button></nav>
+<section id="s1">
 <div class="g"><div class="card">Total Work Order<b id="n0">0</b><em>100%</em></div><div class="card ok">Complete<b id="n3">0</b><em id="p3"></em><span class="bar"><i id="b3" style="background:var(--g)"></i></span></div>
 <button class="card sel" id="c1" onclick="selS('p')">Pending<b id="n1">0</b><em id="p1"></em><span class="bar"><i id="b1" style="background:var(--p)"></i></span></button>
 <button class="card sel" id="c2" onclick="selS('c')">Cancel<b id="n2">0</b><em id="p2"></em><span class="bar"><i id="b2" style="background:var(--r)"></i></span></button>
@@ -106,7 +115,7 @@ main>section{animation:tab .5s both}
 <div class="tb"><div class="srch"><span>🔍</span><input id="q" placeholder="Cari No. WO, pelanggan, teknisi, alamat, kendala..." oninput="sq()"></div>
 <div class="cwrap"><button class="cbtn" onclick="tgl()">📅 <span id="rng">Semua tanggal</span></button><div id="pop" class="pop"><div id="cal"></div><button class="rs" onclick="clr()">Reset tanggal</button></div></div></div>
 <div id="det"><div class="empty">Pilih Pending atau Cancel untuk melihat detail Work Order.</div></div></section>
-<section id="s2" class="hide"><select id="per" onchange="kpi()"></select><div id="kt" class="tw"></div></section>
+<section id="s2" class="hide"><h2 class="st">KPI Teknisi</h2><select id="per" onchange="kpi()"></select><div id="kt" class="tw"></div></section>
 </main></div>
 <script>
 const API='https://script.google.com/macros/s/AKfycbzoMFPqXTMNUapk4RKuVGCiD8IbXiHzHb_ALLSFN4yaBUn9uU0BKTpnT1MGwurkQmuS/exec'; // URL deployment Apps Script (berakhiran /exec)
@@ -114,7 +123,7 @@ const $=id=>document.getElementById(id),E=s=>String(s==null?'':s).replace(/[&<>"
 const MN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 const MI={jan:0,feb:1,mar:2,apr:3,mei:4,may:4,jun:5,jul:6,agu:7,aug:7,sep:8,okt:9,oct:9,nov:10,des:11,dec:11};
 let W=[],K={},sel=null,from=null,to=null,cal=new Date(),marks={},cred=null,tmr;
-const T0=(()=>{const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime()})();
+let T0=(()=>{const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime()})();
 function dates(s){const r=[],Y=new Date().getFullYear();let m;
  const a=/(\d{1,2})\s+([A-Za-z]{3,9})\.?(?:\s+(\d{4}))?/g;
  while(m=a.exec(s)){const k=MI[m[2].slice(0,3).toLowerCase()];if(k!==undefined&&m[1]<=31)r.push(new Date(m[3]?+m[3]:Y,k,+m[1]).getTime())}
@@ -186,6 +195,13 @@ function kpi(){const R=K[$('per').value]||[];if(!R.length){$('kt').innerHTML='<d
  return '<tr class="'+c+'" style="animation-delay:'+Math.min(i,25)*30+'ms">'+[0,1,2,3,4,5,6,7].map(j=>'<td>'+E(r[j])+(j==1?a:'')+'</td>').join('')+'</tr>'}).join('')+'</tbody></table>'}
 function tgl(){$('pop').classList.toggle('open')}
 document.addEventListener('click',e=>{if(!e.composedPath().some(n=>n.classList&&n.classList.contains('cwrap')))$('pop').classList.remove('open')});
+function fit(){document.querySelectorAll('.fit').forEach(e=>{const w=e.parentNode.clientWidth;if(!w)return;e.style.fontSize='100px';const k=w/e.offsetWidth;e.style.fontSize=Math.min(54,Math.floor(100*k))+'px'})}
+addEventListener('resize',fit);fit();if(document.fonts)document.fonts.ready.then(fit);
+function tick(){const n=new Date(),z={timeZone:'Asia/Jakarta'};
+ $('jam').textContent=n.toLocaleTimeString('id-ID',{...z,hour12:false}).replace(/\./g,':')+' WIB';
+ $('tgl').textContent=n.toLocaleDateString('id-ID',{...z,weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+ const t=new Date(n.getFullYear(),n.getMonth(),n.getDate()).getTime();if(t!==T0){T0=t;if(W.length){reminders();render()}}}
+tick();setInterval(tick,1000);
 if(localStorage.wo_tk){$('login').classList.add('hide');$('app').classList.remove('hide');tab(+localStorage.wo_tab||1);$('det').innerHTML='<div class="empty">Memuat data...</div>';
- load({t:localStorage.wo_tk}).then(d=>{if(d.ok)start(d);else{localStorage.removeItem('wo_tk');$('app').classList.add('hide');$('login').classList.remove('hide');$('err').textContent=d.msg||'Sesi berakhir, silakan login kembali.'}}).catch(()=>{$('det').innerHTML='<div class="empty">Gagal memuat data. Periksa koneksi lalu muat ulang halaman.</div>'})}
+ load({t:localStorage.wo_tk}).then(d=>{if(d.ok)start(d);else{localStorage.removeItem('wo_tk');$('app').classList.add('hide');$('login').classList.remove('hide');fit();$('err').textContent=d.msg||'Sesi berakhir, silakan login kembali.'}}).catch(()=>{$('det').innerHTML='<div class="empty">Gagal memuat data. Periksa koneksi lalu muat ulang halaman.</div>'})}
 </script></body></html>
