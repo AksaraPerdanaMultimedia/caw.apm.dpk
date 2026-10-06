@@ -118,6 +118,29 @@ main>section{animation:tab .5s both}
 .lt:after{content:'';display:block;width:64px;height:5px;border-radius:5px;margin-top:16px;background:linear-gradient(90deg,#f97316,#fbbf24)}
 .wm img{width:300px;max-width:80%}.dwm .wm img{width:300px}.wm span{font-size:22px}
 @keyframes shine{to{background-position:-200% 0}}
+
+@media(max-width:700px){
+main{padding:12px}.box{padding:22px}
+header{padding:16px 16px 18px;flex-direction:column;align-items:stretch;gap:12px;border-radius:0 0 22px 22px}
+.brand{gap:10px}.logo{width:44px;height:44px;font-size:16px;border-radius:12px}h1{font-size:17px;letter-spacing:.5px}.brand small{font-size:12px}
+.hr{flex-direction:row;justify-content:space-between;align-items:center;width:100%}.clk{text-align:left}.clk b{font-size:20px}
+.tabs button{flex:1;padding:11px 8px}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:10px}.card{padding:10px 12px}.card b{font-size:24px}
+.tb{flex-direction:column;align-items:stretch}.srch,.cwrap{width:100%;min-width:0}.cbtn{width:100%}
+.pop{left:0;right:auto;width:min(330px,100%);transform-origin:top left}.d{height:38px;font-size:14px}
+#rem{padding:10px}.rm{font-size:13px}.chip{font-size:12.5px;padding:6px 10px}
+.dwm .wm img,.wm img{width:210px}.wm span{font-size:18px}#dw{min-height:220px}
+.tw{width:100%;border:0;box-shadow:none;background:none;border-radius:0;overflow:visible}
+.tw table,.tw thead,.tw tbody,.tw tr,.tw td{display:block;width:100%}.tw thead{display:none}
+.tw tr{background:#fff;border:1px solid #cfd9ea;border-left:5px solid var(--a);border-radius:12px;margin-bottom:12px;padding:6px 12px;box-shadow:0 4px 14px #1e3a5f14}
+.tw td{display:flex;justify-content:space-between;gap:14px;border:0;border-bottom:1px dashed #dfe6f1;padding:7px 0;background:transparent!important;text-align:right!important;white-space:normal!important;min-width:0!important;max-width:none!important}
+.tw td::before{content:attr(data-l);flex:none;width:104px;font-weight:700;color:var(--m);text-align:left}
+.tw td:last-child{border-bottom:0}.tw td:empty{display:none}
+.tw td:nth-child(2){font-weight:800;color:#19376d}
+.tw td.empty{display:block;text-align:center!important}.tw td.empty::before{content:none}
+.tw tr.h0{background:#fee2e2;border-left-color:#b91c1c}.tw tr.h1{background:#ffe4e6;border-left-color:var(--r)}.tw tr.h2{background:#fef3c7;border-left-color:#f59e0b}.tw tr.h3{background:#e0ecff}
+.tw tr.hi{border-left-color:var(--g)}.tw tr.lo{border-left-color:var(--r)}
+}
 </style></head><body>
 <div id="login"><div class="box"><div class="wm"><img src="Logo_APM.png" alt=""><span>Depok</span></div><h2 class="lt"><span class="fit">SELAMAT DATANG</span><span class="fit">ini adalah data kontrol work order</span><span class="fit s3">APM SO DEPOK</span></h2><div class="sl">Silahkan Login</div>
 <input id="u" placeholder="ID Karyawan" autocomplete="username"><input id="p" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key=='Enter')login()">
@@ -174,7 +197,7 @@ function bd(r){return '<span class="bd '+({p:'bp',c:'bc',ok:'bk'}[r.s]||'bx')+'"
 function tbl(L,cls,lim){const rr=rowRem();
  return '<div class="tw '+cls+'"><table class="dt"><thead><tr><th>No</th><th>Work Order</th><th>Tanggal Install</th><th>Teknisi</th><th>Pelanggan</th><th>Alamat</th><th>Status</th><th>Kendala</th><th>Remark</th></tr></thead><tbody>'+
  (L.slice(0,lim||1e9).map((r,i)=>{const h=rr.get(r);
- return '<tr class="'+(h?h.l:'')+'" style="animation-delay:'+Math.min(i,25)*35+'ms"><td>'+(i+1)+'</td><td>'+E(r.wo)+'</td><td>'+E(r.tg)+'</td><td>'+E(r.tk)+'</td><td>'+E(r.pl)+'</td><td>'+E(r.al)+'</td><td>'+bd(r)+(h?' <span class="tag">'+(h.d?'H-'+h.d:'HARI INI')+'</span>':'')+'</td><td>'+E(r.kd)+'</td><td>'+E(r.rm)+'</td></tr>'}).join('')||'<tr><td colspan="9" class="empty">Tidak ada data pada rentang tanggal ini.</td></tr>')+'</tbody></table></div>'}
+ return '<tr class="'+(h?h.l:'')+'" style="animation-delay:'+Math.min(i,25)*35+'ms"><td data-l="No">'+(i+1)+'</td><td data-l="Work Order">'+E(r.wo)+'</td><td data-l="Tanggal Install">'+E(r.tg)+'</td><td data-l="Teknisi">'+E(r.tk)+'</td><td data-l="Pelanggan">'+E(r.pl)+'</td><td data-l="Alamat">'+E(r.al)+'</td><td data-l="Status">'+bd(r)+(h?' <span class="tag">'+(h.d?'H-'+h.d:'HARI INI')+'</span>':'')+'</td><td data-l="Kendala">'+E(r.kd)+'</td><td data-l="Remark">'+E(r.rm)+'</td></tr>'}).join('')||'<tr><td colspan="9" class="empty">Tidak ada data pada rentang tanggal ini.</td></tr>')+'</tbody></table></div>'}
 let qt;function sq(){clearTimeout(qt);qt=setTimeout(render,150)}
 function render(){const f=W.filter(inR),P=f.filter(r=>r.s=='p'),C=f.filter(r=>r.s=='c'),ok=f.filter(r=>r.s=='ok').length,tot=f.length,pc=n=>tot?n*100/tot:0;
  $('n0').textContent=tot;$('n3').textContent=ok;$('n1').textContent=P.length;$('n2').textContent=C.length;
@@ -207,11 +230,12 @@ function drawCal(){const y=cal.getFullYear(),m=cal.getMonth(),f=new Date(y,m,1).
  for(let d=1;d<=n;d++){const t=new Date(y,m,d).getTime(),on=from&&t>=from&&t<=(to||from);h+='<button class="d'+(on?' on':'')+(marks[t]?' dot':'')+'" onclick="pick('+t+')">'+d+'</button>'}
  $('cal').innerHTML=h+'</div>'}
 // KPI
+const KH=['ID Karyawan','Nama Karyawan','Target Bulanan','Realisasi Pemasangan','Target Harian','Realisasi Harian','% Pencapaian','Predikat'];
 function kpi(){const R=K[$('per').value]||[];if(!R.length){$('kt').innerHTML='<div class="empty">Belum ada data periode ini.</div>';return}
  const v=r=>parseFloat(String(r[6]).replace('%','').replace(',','.'))||0,vs=R.map(v),mx=Math.max(...vs),mn=Math.min(...vs);
  $('kt').innerHTML='<table class="k"><thead><tr><th>ID Karyawan</th><th>Nama Karyawan</th><th>Target Bulanan</th><th>Realisasi Pemasangan</th><th>Target Harian</th><th>Realisasi Harian</th><th>% Pencapaian</th><th>Predikat</th></tr></thead><tbody>'+
  R.map((r,i)=>{const x=vs[i],c=x==mx?'hi':x==mn?'lo':'',a=x==mx?'<span class="ar up" title="Poin tertinggi">▲</span>':x==mn?'<span class="ar dn" title="Poin terendah">▼</span>':'';
- return '<tr class="'+c+'" style="animation-delay:'+Math.min(i,25)*30+'ms">'+[0,1,2,3,4,5,6,7].map(j=>'<td>'+E(r[j])+(j==1?a:'')+'</td>').join('')+'</tr>'}).join('')+'</tbody></table>'}
+ return '<tr class="'+c+'" style="animation-delay:'+Math.min(i,25)*30+'ms">'+[0,1,2,3,4,5,6,7].map(j=>'<td data-l="'+KH[j]+'">'+E(r[j])+(j==1?a:'')+'</td>').join('')+'</tr>'}).join('')+'</tbody></table>'}
 function tgl(){$('pop').classList.toggle('open')}
 document.addEventListener('click',e=>{if(!e.composedPath().some(n=>n.classList&&n.classList.contains('cwrap')))$('pop').classList.remove('open')});
 function fit(){const L=[...document.querySelectorAll('.fit')];L.forEach(e=>{if(e.classList.contains('s3'))return;const w=e.parentNode.clientWidth*.97;if(!w)return;e.style.fontSize='100px';const k=w/e.offsetWidth;e.style.fontSize=Math.min(54,Math.floor(100*k))+'px'});if(L[1]&&L[2])L[2].style.fontSize=L[1].style.fontSize}
