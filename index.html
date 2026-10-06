@@ -66,7 +66,7 @@ main{padding-top:20px}
 .pop.open{opacity:1;visibility:visible;transform:none}
 .cg{gap:1px}.cg i{font-size:10px}.d{font-size:12px;aspect-ratio:auto;height:28px}.ch{font-size:13px}.ch button{width:24px;height:24px}.d.dot:after{bottom:2px;width:4px;height:4px}
 .tw{width:fit-content;max-width:100%}table{width:auto;min-width:0}th,td{padding:7px 10px;font-size:13px}
-.dt td:nth-child(-n+4),.dt td:nth-child(6),.k td{white-space:nowrap}.dt td:nth-child(5){min-width:200px;max-width:280px}.dt td:nth-child(n+7){min-width:90px;max-width:220px}
+.dt td:nth-child(-n+5),.dt td:nth-child(7),.k td{white-space:nowrap}.dt td:nth-child(6){min-width:200px;max-width:280px}.dt td:nth-child(n+8){min-width:90px;max-width:220px}.dt td:first-child{color:var(--m);font-weight:700;text-align:right}
 button{transition:transform .15s,box-shadow .25s,background .25s,border-color .25s}button:active{transform:scale(.93)}
 .sel.on{animation:pp .5s}.d:active{transform:scale(.8)}
 main>section{animation:tab .5s both}
@@ -86,12 +86,17 @@ main>section{animation:tab .5s both}
 @keyframes ring{0%,50%,100%{transform:rotate(0)}10%{transform:rotate(20deg)}20%{transform:rotate(-18deg)}30%{transform:rotate(12deg)}40%{transform:rotate(-8deg)}}
 @keyframes shake{0%,90%,100%{transform:none}92%{transform:translateX(-5px)}96%{transform:translateX(5px)}}
 @keyframes glow{50%{box-shadow:0 0 18px #ef4444aa}}@keyframes glow2{50%{box-shadow:0 0 18px #f59e0baa}}
+
+.box{border-top:5px solid #0e7490}.box h2{font-size:26px;line-height:1.2;font-weight:800;background:linear-gradient(120deg,#0b2447,#0e7490);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:8px}.box p{margin-bottom:10px}.sl{font-weight:700;color:#0e7490;margin-bottom:12px}
+.logo{font-size:20px;font-weight:800;letter-spacing:1px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}.chip{padding:6px 12px;border-radius:999px;border:1px solid #cfd9ea;background:#fff;cursor:pointer;font-size:13px;animation:rise .4s both}
+.chip b{margin-left:4px;color:var(--a)}.chip:hover{border-color:var(--a);transform:translateY(-2px)}.chip.on{background:var(--a);color:#fff;border-color:var(--a)}.chip.on b{color:#fff}
 </style></head><body>
-<div id="login"><div class="box"><h2>👋 Selamat datang di Pusat Kendali Workorder APM SO Depok</h2><p>Pantau dan kendalikan setiap pekerjaan dalam satu layar. Silahkan Login</p>
+<div id="login"><div class="box"><h2>Kendalikan Setiap Work Order APM SO Depok</h2><p>Pantau status, kendala, dan jadwal ulang pekerjaan dalam satu dashboard.</p><div class="sl">Silahkan Login</div>
 <input id="u" placeholder="ID Karyawan" autocomplete="username"><input id="p" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key=='Enter')login()">
 <button class="pri" onclick="login()">Login</button><div id="err"></div></div></div>
 <div id="app" class="hide">
-<header><div class="brand"><span class="logo">📊</span><div><h1>CONTROLLING WO APM SO DEPOK</h1><small>Pantau Work Order dan KPI teknisi dalam satu layar</small></div></div><nav><button id="t1" class="on" onclick="tab(1)">Work Order</button> <button id="t2" onclick="tab(2)">Rekap KPI Bulanan</button></nav><button onclick="out()">Keluar</button></header>
+<header><div class="brand"><span class="logo">WO</span><div><h1>CONTROLLING WO APM SO DEPOK</h1><small>Pantau Work Order dan KPI teknisi dalam satu layar</small></div></div><nav><button id="t1" class="on" onclick="tab(1)">Work Order</button> <button id="t2" onclick="tab(2)">Rekap KPI Bulanan</button></nav><button onclick="out()">Keluar</button></header>
 <main>
 <section id="s1"><div id="rem"></div>
 <div class="g"><div class="card">Total Work Order<b id="n0">0</b><em>100%</em></div><div class="card ok">Complete<b id="n3">0</b><em id="p3"></em><span class="bar"><i id="b3" style="background:var(--g)"></i></span></div>
@@ -120,27 +125,28 @@ function dates(s){const r=[],Y=new Date().getFullYear();let m;
  return r}
 const st=s=>/pend/i.test(s)?'p':/cancel|batal/i.test(s)?'c':/complete|selesai/i.test(s)?'ok':'x';
 const fmt=t=>{const d=new Date(t);return d.getDate()+' '+MN[d.getMonth()]+' '+d.getFullYear()};
-async function load(u,p){const r=await fetch(API,{method:'POST',body:JSON.stringify({u,p})});return r.json()}
+async function load(b){const r=await fetch(API,{method:'POST',body:JSON.stringify(b)});return r.json()}
 async function login(){$('err').textContent='';const u=$('u').value.trim(),p=$('p').value;
- try{const d=await load(u,p);if(!d.ok){$('err').textContent=d.msg||'Gagal login';return}
- cred={u,p};sessionStorage.wo=JSON.stringify(cred);start(d)}catch(e){$('err').textContent='Tidak dapat terhubung ke server. Periksa URL API.'}}
-function start(d){$('login').classList.add('hide');$('app').classList.remove('hide');ingest(d);clearInterval(tmr);
- tmr=setInterval(async()=>{try{const x=await load(cred.u,cred.p);if(x.ok)ingest(x)}catch(e){}},120000)}
-function out(){sessionStorage.removeItem('wo');location.reload()}
+ try{const d=await load({u,p});if(!d.ok){$('err').textContent=d.msg||'Gagal login';return}
+ localStorage.wo_tk=d.tk;start(d)}catch(e){$('err').textContent='Tidak dapat terhubung ke server. Periksa URL API.'}}
+function start(d){$('login').classList.add('hide');$('app').classList.remove('hide');ingest(d);tab(+localStorage.wo_tab||1);clearInterval(tmr);
+ tmr=setInterval(async()=>{try{const x=await load({t:localStorage.wo_tk});if(x.ok)ingest(x);else if(x.bad)out()}catch(e){}},120000)}
+function out(){localStorage.removeItem('wo_tk');location.reload()}
 function ingest(d){W=d.wo.slice(1).filter(r=>r[1]).map(r=>({wo:r[1],tg:r[2],t:(dates(r[2])[0]||0),tk:r[3],pl:r[4],al:r[5],st:r[6],s:st(r[6]),kd:r[7],rm:r[8]}));
  marks={};W.forEach(r=>{if(r.s=='p'||r.s=='c')marks[r.t]=1});K=parseK(d.kpi);
  const ks=Object.keys(K),cur=$('per').value;$('per').innerHTML=ks.map(k=>'<option>'+E(k)+'</option>').join('');$('per').value=ks.includes(cur)?cur:ks[ks.length-1];
  reminders();render();kpi()}
 function parseK(v){const P={};let c=null;for(const r of v){const a=(r[0]||'').trim();
  if(/^BULAN\s/i.test(a)){c=a.replace(/^BULAN\s+/i,'');P[c]=[]}else if(c&&a&&r[1]&&!/^ID\s/i.test(a)&&/\d/.test(r[3]))P[c].push(r)}return P}
-function tab(n){$('s1').classList.toggle('hide',n!=1);$('s2').classList.toggle('hide',n!=2);$('t1').classList.toggle('on',n==1);$('t2').classList.toggle('on',n==2);if(n==2)kpi()}
+function tab(n){localStorage.wo_tab=n;$('s1').classList.toggle('hide',n!=1);$('s2').classList.toggle('hide',n!=2);$('t1').classList.toggle('on',n==1);$('t2').classList.toggle('on',n==2);if(n==2)kpi()}
 const inR=r=>!from||(r.t>=from&&r.t<=(to||from));
-function selS(x){sel=sel==x?null:x;render()}
+let kf=null,cats=[];function selS(x){sel=sel==x?null:x;kf=null;render()}
+function setK(i){kf=i<0||cats[i].k===kf?null:cats[i].k;render()}
 function bd(r){return '<span class="bd '+({p:'bp',c:'bc',ok:'bk'}[r.s]||'bx')+'">'+E(r.st)+'</span>'}
 function tbl(L,cls,lim){const rr=rowRem();
- return '<div class="tw '+cls+'"><table class="dt"><thead><tr><th>Work Order</th><th>Tanggal Install</th><th>Teknisi</th><th>Pelanggan</th><th>Alamat</th><th>Status</th><th>Kendala</th><th>Remark</th></tr></thead><tbody>'+
+ return '<div class="tw '+cls+'"><table class="dt"><thead><tr><th>No</th><th>Work Order</th><th>Tanggal Install</th><th>Teknisi</th><th>Pelanggan</th><th>Alamat</th><th>Status</th><th>Kendala</th><th>Remark</th></tr></thead><tbody>'+
  (L.slice(0,lim||1e9).map((r,i)=>{const h=rr.get(r);
- return '<tr class="'+(h?h.l:'')+'" style="animation-delay:'+Math.min(i,25)*35+'ms"><td>'+E(r.wo)+'</td><td>'+E(r.tg)+'</td><td>'+E(r.tk)+'</td><td>'+E(r.pl)+'</td><td>'+E(r.al)+'</td><td>'+bd(r)+(h?' <span class="tag">'+(h.d?'H-'+h.d:'HARI INI')+'</span>':'')+'</td><td>'+E(r.kd)+'</td><td>'+E(r.rm)+'</td></tr>'}).join('')||'<tr><td colspan="8" class="empty">Tidak ada data pada rentang tanggal ini.</td></tr>')+'</tbody></table></div>'}
+ return '<tr class="'+(h?h.l:'')+'" style="animation-delay:'+Math.min(i,25)*35+'ms"><td>'+(i+1)+'</td><td>'+E(r.wo)+'</td><td>'+E(r.tg)+'</td><td>'+E(r.tk)+'</td><td>'+E(r.pl)+'</td><td>'+E(r.al)+'</td><td>'+bd(r)+(h?' <span class="tag">'+(h.d?'H-'+h.d:'HARI INI')+'</span>':'')+'</td><td>'+E(r.kd)+'</td><td>'+E(r.rm)+'</td></tr>'}).join('')||'<tr><td colspan="9" class="empty">Tidak ada data pada rentang tanggal ini.</td></tr>')+'</tbody></table></div>'}
 let qt;function sq(){clearTimeout(qt);qt=setTimeout(render,150)}
 function render(){const f=W.filter(inR),P=f.filter(r=>r.s=='p'),C=f.filter(r=>r.s=='c'),ok=f.filter(r=>r.s=='ok').length,tot=f.length,pc=n=>tot?n*100/tot:0;
  $('n0').textContent=tot;$('n3').textContent=ok;$('n1').textContent=P.length;$('n2').textContent=C.length;
@@ -151,7 +157,11 @@ function render(){const f=W.filter(inR),P=f.filter(r=>r.s=='p'),C=f.filter(r=>r.
  if(q){const ks=q.split(/\s+/),R=W.filter(r=>{const s=(r.wo+' '+r.pl+' '+r.tk+' '+r.al+' '+r.tg+' '+r.st+' '+r.kd+' '+r.rm).toLowerCase();return ks.every(k=>s.includes(k))});
   $('det').innerHTML='<div class="sinfo">🔍 '+R.length+' Work Order ditemukan untuk "'+E(q)+'" (semua tanggal)'+(R.length>100?', menampilkan 100 pertama':'')+'</div>'+(R.length?tbl(R,'a-s',100):'<div class="empty">Tidak ada yang cocok. Coba No. WO, nama pelanggan, atau teknisi lain.</div>');return}
  const L=sel=='p'?P:sel=='c'?C:null;
- $('det').innerHTML=L?tbl(L,'a-'+sel):'<div class="empty">Pilih Pending atau Cancel untuk melihat detail Work Order, atau gunakan kolom pencarian.</div>'}
+ if(L){const m=new Map();L.forEach(r=>{const k=(r.kd||'').trim().toLowerCase(),o=m.get(k)||{k,l:(r.kd||'').trim()||'Tanpa kendala',n:0};o.n++;m.set(k,o)});
+  cats=[...m.values()].sort((a,b)=>b.n-a.n);if(kf!==null&&!m.has(kf))kf=null;
+  const L2=kf===null?L:L.filter(r=>(r.kd||'').trim().toLowerCase()===kf);
+  $('det').innerHTML='<div class="sinfo">'+(sel=='p'?'Pending':'Cancel')+': <b>'+L2.length+'</b> Work Order'+(kf!==null?' (dari '+L.length+')':'')+'</div><div class="chips"><button class="chip'+(kf===null?' on':'')+'" onclick="setK(-1)">Semua Kendala <b>'+L.length+'</b></button>'+cats.map((c,i)=>'<button class="chip'+(kf===c.k?' on':'')+'" style="animation-delay:'+Math.min(i,12)*40+'ms" onclick="setK('+i+')">'+E(c.l)+' <b>'+c.n+'</b></button>').join('')+'</div>'+tbl(L2,'a-'+sel);return}
+ $('det').innerHTML='<div class="empty">Pilih Pending atau Cancel untuk melihat detail Work Order, atau gunakan kolom pencarian.</div>'}
 // Pengingat: WO Pending/reschedule (bukan Complete/Cancel) dengan tanggal mendatang di Kendala/Remark atau tanggal install Pending
 function rowRem(){const m=new Map();for(const r of W){if(r.s=='ok'||r.s=='c')continue;const ds=dates((r.kd||'')+' '+(r.rm||''));if(r.s=='p'&&r.t)ds.push(r.t);
  let b=null;for(const t of ds){const d=Math.round((t-T0)/864e5);if(d>=0&&d<=7&&(b===null||d<b))b=d}
@@ -176,5 +186,6 @@ function kpi(){const R=K[$('per').value]||[];if(!R.length){$('kt').innerHTML='<d
  return '<tr class="'+c+'" style="animation-delay:'+Math.min(i,25)*30+'ms">'+[0,1,2,3,4,5,6,7].map(j=>'<td>'+E(r[j])+(j==1?a:'')+'</td>').join('')+'</tr>'}).join('')+'</tbody></table>'}
 function tgl(){$('pop').classList.toggle('open')}
 document.addEventListener('click',e=>{if(!e.composedPath().some(n=>n.classList&&n.classList.contains('cwrap')))$('pop').classList.remove('open')});
-if(sessionStorage.wo){try{cred=JSON.parse(sessionStorage.wo);load(cred.u,cred.p).then(d=>{if(d.ok)start(d)})}catch(e){}}
+if(localStorage.wo_tk){$('login').classList.add('hide');$('app').classList.remove('hide');tab(+localStorage.wo_tab||1);$('det').innerHTML='<div class="empty">Memuat data...</div>';
+ load({t:localStorage.wo_tk}).then(d=>{if(d.ok)start(d);else{localStorage.removeItem('wo_tk');$('app').classList.add('hide');$('login').classList.remove('hide');$('err').textContent=d.msg||'Sesi berakhir, silakan login kembali.'}}).catch(()=>{$('det').innerHTML='<div class="empty">Gagal memuat data. Periksa koneksi lalu muat ulang halaman.</div>'})}
 </script></body></html>
