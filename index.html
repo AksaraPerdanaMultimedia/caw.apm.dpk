@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Controlling WO APM SO Depok</title>
+<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Controlling WO APM SO Depok</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#eef2f7;--c:#ffffff;--c2:#e8eefb;--t:#1e293b;--m:#64748b;--a:#2563eb;--p:#f59e0b;--r:#ef4444;--g:#10b981}
 *{box-sizing:border-box}body{margin:0;font:14px/1.45 'Segoe UI',system-ui,sans-serif;background:linear-gradient(135deg,#e6edf7,#dde8f5 50%,#e1f0ee) fixed;color:var(--t);min-height:100vh}
@@ -110,6 +110,14 @@ main>section{animation:tab .5s both}
 .dt tbody tr:nth-child(even):not(.h0,.h1,.h2,.h3) td{background:#f4f8fd}.dt tbody tr:hover:not(.h0,.h1,.h2,.h3) td{background:#e3edfb}
 .a-p,.a-c,.a-s{animation:wipe .85s cubic-bezier(.22,.8,.3,1) both}.a-p tbody tr,.a-c tbody tr,.a-s tbody tr{animation:inL .6s cubic-bezier(.22,.8,.3,1) both}
 @keyframes tab{from{opacity:0;transform:translateX(-40px)}}
+
+.box h2.lt{font-family:'Poppins','Segoe UI',system-ui,sans-serif;margin-bottom:6px}
+.lt .fit{font-family:inherit;font-weight:800;letter-spacing:.01em;background:linear-gradient(100deg,#0b2447,#0e7490,#0b2447);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 6s linear infinite}
+.lt .fit:nth-child(2){font-weight:500;letter-spacing:.015em;margin-top:2px}
+.lt .s3{display:inline-block;margin-top:10px;padding:.32em .95em;border-radius:999px;font-weight:700;letter-spacing:.14em;color:#fff;-webkit-text-fill-color:#fff;background:linear-gradient(120deg,#f97316,#fb923c);-webkit-background-clip:border-box;background-clip:border-box;animation:none;box-shadow:0 6px 16px #f9731655}
+.lt:after{content:'';display:block;width:64px;height:5px;border-radius:5px;margin-top:16px;background:linear-gradient(90deg,#f97316,#fbbf24)}
+.wm img{width:300px;max-width:80%}.dwm .wm img{width:300px}.wm span{font-size:22px}
+@keyframes shine{to{background-position:-200% 0}}
 </style></head><body>
 <div id="login"><div class="box"><div class="wm"><img src="Logo_APM.png" alt=""><span>APM Depok</span></div><h2 class="lt"><span class="fit">SELAMAT DATANG</span><span class="fit">ini adalah data kontrol work order</span><span class="fit s3">APM SO DEPOK</span></h2><div class="sl">Silahkan Login</div>
 <input id="u" placeholder="ID Karyawan" autocomplete="username"><input id="p" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key=='Enter')login()">
@@ -206,7 +214,7 @@ function kpi(){const R=K[$('per').value]||[];if(!R.length){$('kt').innerHTML='<d
  return '<tr class="'+c+'" style="animation-delay:'+Math.min(i,25)*30+'ms">'+[0,1,2,3,4,5,6,7].map(j=>'<td>'+E(r[j])+(j==1?a:'')+'</td>').join('')+'</tr>'}).join('')+'</tbody></table>'}
 function tgl(){$('pop').classList.toggle('open')}
 document.addEventListener('click',e=>{if(!e.composedPath().some(n=>n.classList&&n.classList.contains('cwrap')))$('pop').classList.remove('open')});
-function fit(){const L=[...document.querySelectorAll('.fit')];L.forEach(e=>{if(e.classList.contains('s3'))return;const w=e.parentNode.clientWidth;if(!w)return;e.style.fontSize='100px';const k=w/e.offsetWidth;e.style.fontSize=Math.min(54,Math.floor(100*k))+'px'});if(L[1]&&L[2])L[2].style.fontSize=L[1].style.fontSize}
+function fit(){const L=[...document.querySelectorAll('.fit')];L.forEach(e=>{if(e.classList.contains('s3'))return;const w=e.parentNode.clientWidth*.97;if(!w)return;e.style.fontSize='100px';const k=w/e.offsetWidth;e.style.fontSize=Math.min(54,Math.floor(100*k))+'px'});if(L[1]&&L[2])L[2].style.fontSize=L[1].style.fontSize}
 addEventListener('resize',fit);fit();if(document.fonts)document.fonts.ready.then(fit);
 function tick(){const n=new Date(),z={timeZone:'Asia/Jakarta'};
  $('jam').textContent=n.toLocaleTimeString('id-ID',{...z,hour12:false}).replace(/\./g,':')+' WIB';
