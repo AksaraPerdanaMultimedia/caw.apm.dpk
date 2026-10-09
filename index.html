@@ -141,6 +141,19 @@ header{padding:16px 16px 18px;flex-direction:column;align-items:stretch;gap:12px
 .tw tr.h0{background:#fee2e2;border-left-color:#b91c1c}.tw tr.h1{background:#ffe4e6;border-left-color:var(--r)}.tw tr.h2{background:#fef3c7;border-left-color:#f59e0b}.tw tr.h3{background:#e0ecff}
 .tw tr.hi{border-left-color:var(--g)}.tw tr.lo{border-left-color:var(--r)}
 }
+
+.tc{background:#fff;border-radius:16px;padding:16px 18px;box-shadow:0 8px 26px #1e3a5f1a;border:1px solid #d5deec;margin-bottom:14px}
+.th{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:flex-start}.th .st{margin:0}.th small{color:var(--m)}.th .chips{margin:0}
+.chip .dot,.tip .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}.chip.off{opacity:.45}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:14px 0}
+.sc{background:#f4f8fd;border:1px solid #dbe5f3;border-radius:12px;padding:10px 14px;animation:rise .5s both}.sc small{display:block;color:var(--m);font-weight:600}.sc b{display:block;font-size:24px}.sc em{font-style:normal;font-size:12px;color:var(--m)}
+.up2{color:#2563eb}.dn2{color:#ea580c}.sc b.up2,.sc b.dn2{font-size:22px}
+.cw2{position:relative}.tip{position:absolute;pointer-events:none;background:#0b2447;color:#fff;border-radius:10px;padding:8px 12px;font-size:12px;opacity:0;transition:opacity .15s;box-shadow:0 8px 20px #0b244766;white-space:nowrap;z-index:5;line-height:1.6}
+.gr{stroke:#e2e8f2;stroke-dasharray:3 4}.ax{font:11px 'Segoe UI',system-ui,sans-serif;fill:#64748b}.vl{font:700 11px 'Segoe UI',system-ui,sans-serif;fill:#19376d;animation:fd .5s 1.2s both}
+.ln{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.6s cubic-bezier(.22,.8,.3,1) forwards}.ar{animation:fd 1.2s .4s both}.pt{animation:fd .4s both}
+.mt td{white-space:nowrap}.mt td:not(:first-child),.mt th:not(:first-child){text-align:center}.mt td:first-child{font-weight:700}
+@keyframes draw{to{stroke-dashoffset:0}}@keyframes fd{from{opacity:0}}
+@media(max-width:700px){.tc{padding:14px}.g3{grid-template-columns:1fr 1fr}.sc b{font-size:20px}}
 </style></head><body>
 <div id="login"><div class="box"><div class="wm"><img src="Logo_APM.png" alt=""><span>Depok</span></div><h2 class="lt"><span class="fit">SELAMAT DATANG</span><span class="fit">ini adalah data kontrol work order</span><span class="fit s3">APM SO DEPOK</span></h2><div class="sl">Silahkan Login</div>
 <input id="u" placeholder="ID Karyawan" autocomplete="username"><input id="p" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key=='Enter')login()">
@@ -148,7 +161,7 @@ header{padding:16px 16px 18px;flex-direction:column;align-items:stretch;gap:12px
 <div id="app" class="hide">
 <header><div class="brand"><span class="logo">WO</span><div><h1>CONTROLLING WO APM SO DEPOK</h1><small>Pantau Work Order dan KPI teknisi dalam satu layar</small></div></div><div class="hr"><div class="clk"><b id="jam"></b><small id="tgl"></small></div><button onclick="out()">Keluar</button></div></header>
 <main>
-<div id="rem"></div><nav class="tabs"><button id="t1" class="on" onclick="tab(1)">Work Order</button><button id="t2" onclick="tab(2)">KPI Teknisi</button></nav>
+<div id="rem"></div><nav class="tabs"><button id="t1" class="on" onclick="tab(1)">Work Order</button><button id="t2" onclick="tab(2)">KPI Teknisi</button><button id="t3" onclick="tab(3)">Tren Bulanan</button></nav>
 <section id="s1">
 <div class="g"><div class="card">Total Work Order<b id="n0">0</b><em>100%</em></div><div class="card ok">Complete<b id="n3">0</b><em id="p3"></em><span class="bar"><i id="b3" style="background:var(--g)"></i></span></div>
 <button class="card sel" id="c1" onclick="selS('p')">Pending<b id="n1">0</b><em id="p1"></em><span class="bar"><i id="b1" style="background:var(--p)"></i></span></button>
@@ -158,6 +171,7 @@ header{padding:16px 16px 18px;flex-direction:column;align-items:stretch;gap:12px
 <div class="cwrap"><button class="cbtn" onclick="tgl()">📅 <span id="rng">Semua tanggal</span></button><div id="pop" class="pop"><div id="cal"></div><button class="rs" onclick="clr()">Reset tanggal</button></div></div></div>
 <div id="dw"><div class="dwm"><div class="wm"><img src="Logo_APM.png" alt=""><span>Depok</span></div></div><div id="det"><div class="empty">Pilih Pending atau Cancel untuk melihat detail Work Order.</div></div></div></section>
 <section id="s2" class="hide"><h2 class="st">KPI Teknisi</h2><select id="per" onchange="kpi()"></select><div id="kt" class="tw"></div></section>
+<section id="s3" class="hide"><div class="tc"><div class="th"><div><h2 class="st">Tren Work Order per Bulan</h2><small id="tsub"></small></div><div id="lg" class="chips"></div></div><div id="ts" class="g3"></div><div id="ch" class="cw2"></div></div><div id="tt"></div></section>
 </main></div>
 <script>
 const API='https://script.google.com/macros/s/AKfycbzoMFPqXTMNUapk4RKuVGCiD8IbXiHzHb_ALLSFN4yaBUn9uU0BKTpnT1MGwurkQmuS/exec'; // URL deployment Apps Script (berakhiran /exec)
@@ -186,10 +200,10 @@ function out(){localStorage.removeItem('wo_tk');location.reload()}
 function ingest(d){W=d.wo.slice(1).filter(r=>r[1]).map(r=>({wo:r[1],tg:r[2],t:(dates(r[2])[0]||0),tk:r[3],pl:r[4],al:r[5],st:r[6],s:st(r[6]),kd:r[7],rm:r[8]}));
  marks={};W.forEach(r=>{if(r.s=='p'||r.s=='c')marks[r.t]=1});K=parseK(d.kpi);
  const ks=Object.keys(K),cur=$('per').value;$('per').innerHTML=ks.map(k=>'<option>'+E(k)+'</option>').join('');$('per').value=ks.includes(cur)?cur:ks[ks.length-1];
- reminders();render();kpi()}
+ reminders();render();kpi();trend()}
 function parseK(v){const P={};let c=null;for(const r of v){const a=(r[0]||'').trim();
  if(/^BULAN\s/i.test(a)){c=a.replace(/^BULAN\s+/i,'');P[c]=[]}else if(c&&a&&r[1]&&!/^ID\s/i.test(a)&&/\d/.test(r[3]))P[c].push(r)}return P}
-function tab(n){localStorage.wo_tab=n;$('s1').classList.toggle('hide',n!=1);$('s2').classList.toggle('hide',n!=2);$('t1').classList.toggle('on',n==1);$('t2').classList.toggle('on',n==2);if(n==2)kpi()}
+function tab(n){localStorage.wo_tab=n;[1,2,3].forEach(i=>{$('s'+i).classList.toggle('hide',n!=i);$('t'+i).classList.toggle('on',n==i)});if(n==2)kpi();if(n==3)trend()}
 const inR=r=>!from||(r.t>=from&&r.t<=(to||from));
 let kf=null,cats=[];function selS(x){sel=sel==x?null:x;kf=null;render()}
 function setK(i){kf=i<0||cats[i].k===kf?null:cats[i].k;render()}
@@ -240,6 +254,43 @@ function tgl(){$('pop').classList.toggle('open')}
 document.addEventListener('click',e=>{if(!e.composedPath().some(n=>n.classList&&n.classList.contains('cwrap')))$('pop').classList.remove('open')});
 function fit(){const L=[...document.querySelectorAll('.fit')];L.forEach(e=>{if(e.classList.contains('s3'))return;const w=e.parentNode.clientWidth*.97;if(!w)return;e.style.fontSize='100px';const k=w/e.offsetWidth;e.style.fontSize=Math.min(54,Math.floor(100*k))+'px'});if(L[1]&&L[2])L[2].style.fontSize=L[1].style.fontSize}
 addEventListener('resize',fit);fit();if(document.fonts)document.fonts.ready.then(fit);
+const MS=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+const SER=[['Total','tot','#2563eb'],['Complete','ok','#10b981'],['Pending','p','#f59e0b'],['Cancel','c','#ef4444']];
+let on={tot:1,ok:1,p:1,c:1};
+const lb=o=>MS[o.k%12]+' '+String(Math.floor(o.k/12)).slice(2),fl=o=>MN[o.k%12]+' '+Math.floor(o.k/12),pc1=x=>Math.abs(x).toFixed(1).replace('.',',')+'%';
+function tg(k){on[k]=!on[k];if(!Object.values(on).some(Boolean))on[k]=1;trend()}
+function nstep(x){const p=10**Math.floor(Math.log10(x)),f=x/p;return Math.max(1,(f<=1?1:f<=2?2:f<=5?5:10)*p)}
+function bez(P,b){let d='M'+P[0][0]+','+P[0][1];for(let i=0;i<P.length-1;i++){const a=P[i-1]||P[i],p1=P[i],p2=P[i+1],c=P[i+2]||p2;
+ d+=' C'+(p1[0]+(p2[0]-a[0])/6)+','+Math.min(b,p1[1]+(p2[1]-a[1])/6)+' '+(p2[0]-(c[0]-p1[0])/6)+','+Math.min(b,p2[1]-(c[1]-p1[1])/6)+' '+p2[0]+','+p2[1]}return d}
+function trend(){const M=new Map();
+ W.forEach(r=>{if(!r.t)return;const d=new Date(r.t),k=d.getFullYear()*12+d.getMonth(),o=M.get(k)||{k,tot:0,ok:0,p:0,c:0};o.tot++;if(o[r.s]!==undefined)o[r.s]++;M.set(k,o)});
+ const TD=[...M.values()].sort((a,b)=>a.k-b.k),box=$('ch'),w=box.clientWidth,n=TD.length;if(!w||!n)return;
+ const nw=new Date(T0),part=TD[n-1].k==nw.getFullYear()*12+nw.getMonth();
+ $('tsub').textContent='Jumlah Work Order berdasarkan tanggal install, '+lb(TD[0])+(n>1?' sampai '+lb(TD[n-1]):'')+(part?' (bulan terakhir masih berjalan)':'');
+ $('lg').innerHTML=SER.map(s=>'<button class="chip'+(on[s[1]]?'':' off')+'" onclick="tg(\''+s[1]+'\')"><i class="dot" style="background:'+s[2]+'"></i>'+s[0]+'</button>').join('');
+ const hi=TD.reduce((a,b)=>b.tot>a.tot?b:a),lo=TD.reduce((a,b)=>b.tot<a.tot?b:a),la=TD[n-1],pv=TD[n-2],dl=pv&&pv.tot?(la.tot-pv.tot)*100/pv.tot:0;
+ $('ts').innerHTML='<div class="sc"><small>Total Work Order</small><b>'+TD.reduce((s,o)=>s+o.tot,0)+'</b><em>'+n+' bulan data</em></div><div class="sc"><small>Bulan tertinggi</small><b>'+hi.tot+'</b><em>'+fl(hi)+'</em></div><div class="sc"><small>Bulan terendah</small><b>'+lo.tot+'</b><em>'+fl(lo)+'</em></div><div class="sc"><small>Perubahan bulan terakhir</small><b class="'+(dl>=0?'up2':'dn2')+'">'+(pv?(dl>=0?'▲ ':'▼ ')+pc1(dl):'-')+'</b><em>'+(pv?lb(pv)+' ke '+lb(la)+(part?' (berjalan)':''):'Belum ada pembanding')+'</em></div>';
+ const H=Math.round(Math.min(360,Math.max(250,w*.4))),L=42,R=20,T=20,B=34,iw=w-L-R,ih=H-T-B,act=SER.filter(s=>on[s[1]]),
+  mx=Math.max(1,...TD.flatMap(o=>act.map(s=>o[s[1]]))),st=nstep(mx/4),top=Math.ceil(mx/st)*st,base=T+ih,
+  X=i=>n>1?L+i*iw/(n-1):L+iw/2,Y=v=>T+ih-v/top*ih;
+ let s='<svg viewBox="0 0 '+w+' '+H+'" width="100%" height="'+H+'"><defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2563eb" stop-opacity=".28"/><stop offset="1" stop-color="#2563eb" stop-opacity="0"/></linearGradient></defs>';
+ for(let v=0;v<=top;v+=st)s+='<line class="gr" x1="'+L+'" x2="'+(w-R)+'" y1="'+Y(v)+'" y2="'+Y(v)+'"/><text class="ax" x="'+(L-8)+'" y="'+(Y(v)+4)+'" text-anchor="end">'+v+'</text>';
+ const stp=Math.ceil(n*52/iw);TD.forEach((o,i)=>{if(i%stp==0||i==n-1)s+='<text class="ax" x="'+X(i)+'" y="'+(H-10)+'" text-anchor="middle">'+lb(o)+'</text>'});
+ if(on.tot&&n>1){const P=TD.map((o,i)=>[X(i),Y(o.tot)]);s+='<path class="ar" d="'+bez(P,base)+' L'+X(n-1)+','+base+' L'+X(0)+','+base+' Z" fill="url(#ga)"/>'}
+ [...SER].reverse().forEach(sr=>{if(!on[sr[1]])return;const P=TD.map((o,i)=>[X(i),Y(o[sr[1]])]);
+  if(n>1)s+='<path class="ln" pathLength="1" d="'+bez(P,base)+'" stroke="'+sr[2]+'"/>';
+  P.forEach((p,i)=>{s+='<circle class="pt" style="animation-delay:'+(1+i*.06)+'s" cx="'+p[0]+'" cy="'+p[1]+'" r="'+(sr[1]=='tot'?5:4)+'" fill="#fff" stroke="'+sr[2]+'" stroke-width="2.5"/>';
+   if(sr[1]=='tot'&&n<=14)s+='<text class="vl" x="'+p[0]+'" y="'+(p[1]-11)+'" text-anchor="middle">'+TD[i].tot+'</text>'})});
+ s+='<line id="gl" y1="'+T+'" y2="'+base+'" stroke="#94a3b8" stroke-dasharray="4 4" style="opacity:0"/><rect x="0" y="0" width="'+w+'" height="'+H+'" fill="transparent"/></svg><div id="tip" class="tip"></div>';
+ box.innerHTML=s;
+ const svg=box.querySelector('svg'),tip=$('tip'),gl=$('gl'),mv=e=>{const r=svg.getBoundingClientRect(),px=(e.clientX-r.left)*w/r.width;let i=n>1?Math.round((px-L)/(iw/(n-1))):0;i=Math.max(0,Math.min(n-1,i));const o=TD[i];
+  gl.setAttribute('x1',X(i));gl.setAttribute('x2',X(i));gl.style.opacity=1;
+  tip.innerHTML='<b>'+fl(o)+'</b>'+act.map(q=>'<div><i class="dot" style="background:'+q[2]+'"></i>'+q[0]+': <b>'+o[q[1]]+'</b></div>').join('');
+  tip.style.opacity=1;tip.style.top='6px';tip.style.left=Math.max(4,Math.min(r.width-tip.offsetWidth-4,X(i)*r.width/w+12))+'px'};
+ svg.addEventListener('pointermove',mv);svg.addEventListener('pointerdown',mv);svg.addEventListener('pointerleave',()=>{tip.style.opacity=0;gl.style.opacity=0});
+ $('tt').innerHTML='<div class="tw a-s"><table class="mt"><thead><tr><th>Bulan</th><th>Total</th><th>Complete</th><th>Pending</th><th>Cancel</th><th>% Complete</th><th>Perubahan Total</th></tr></thead><tbody>'+
+  TD.map((o,i)=>{const p=TD[i-1],d=p?o.tot-p.tot:null;return '<tr style="animation-delay:'+Math.min(i,20)*40+'ms"><td data-l="Bulan">'+fl(o)+'</td><td data-l="Total">'+o.tot+'</td><td data-l="Complete">'+o.ok+'</td><td data-l="Pending">'+o.p+'</td><td data-l="Cancel">'+o.c+'</td><td data-l="% Complete">'+pc1(o.tot?o.ok*100/o.tot:0)+'</td><td data-l="Perubahan Total">'+(p?'<span class="'+(d>=0?'up2':'dn2')+'">'+(d>=0?'▲ +':'▼ ')+d+(p.tot?' ('+pc1(d*100/p.tot)+')':'')+'</span>':'-')+'</td></tr>'}).join('')+'</tbody></table></div>'}
+addEventListener('resize',()=>{if(!$('s3').classList.contains('hide'))trend()});
 function tick(){const n=new Date(),z={timeZone:'Asia/Jakarta'};
  $('jam').textContent=n.toLocaleTimeString('id-ID',{...z,hour12:false}).replace(/\./g,':')+' WIB';
  $('tgl').textContent=n.toLocaleDateString('id-ID',{...z,weekday:'long',day:'2-digit',month:'long',year:'numeric'});
